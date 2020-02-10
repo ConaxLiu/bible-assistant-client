@@ -1,8 +1,0 @@
-{
-  "appService.zipIgnorePattern": [
-    "node_modules{,/**}",
-    ".vscode{,/**}"
-  ],
-  "appService.defaultWebAppToDeploy": "/subscriptions/917f7da0-eb94-42f1-bf63-66640056a770/resourceGroups/webapps/providers/Microsoft.Web/sites/conaxapps",
-  "appService.deploySubpath": ""
-}
