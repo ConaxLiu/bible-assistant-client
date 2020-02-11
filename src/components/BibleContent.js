@@ -11,6 +11,9 @@ function BibleContent() {
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(false);
 
+  const SERVER_URL = "https://conaxbibleservice.azurewebsites.net"
+  //const SERVER_URL = "http://localhost:3000"
+
   // This useEffect is only for initializing default values for the controls
   // We will get the list of Bible book names along with the chapter numbers.
   // This should then allow the book and chapter selection dropdowns to be populated.
@@ -19,14 +22,14 @@ function BibleContent() {
   useEffect(() => {
     console.log("Initializing")
     axios
-      .get("http://localhost:3000/api/contents/booknames")
+      .get(`${SERVER_URL}/api/contents/booknames`)
       .then(resp => {
         const data = resp.data;
         setBookNames(data);
         setChapterNos(data[0].chapters)
 
         axios
-          .get(`http://localhost:3000/api/contents/${data[0].bookName}/1`)
+          .get(`${SERVER_URL}/api/contents/${data[0].bookName}/1`)
           .then(resp => {
             setChapterContent(resp.data);
             setPrevBtnDisabled(true)
@@ -44,7 +47,7 @@ function BibleContent() {
   // This useEffect is used when a book or chapter selection has changed
   useEffect(() => {
     axios
-    .get(`http://localhost:3000/api/contents/${bookName}/${chapterNo}`)
+    .get(`${SERVER_URL}/api/contents/${bookName}/${chapterNo}`)
     .then(resp => {
       setChapterContent(resp.data);
     })
