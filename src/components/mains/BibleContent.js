@@ -21,7 +21,8 @@ function BibleContent() {
   // first chapter in the first book so that can be populated too.
   useEffect(() => {
     console.log("Initializing")
-    document.body.style.zoom = 1;
+    
+    console.log(`${SERVER_URL}/api/contents/booknames`)
 
     axios
       .get(`${SERVER_URL}/api/contents/booknames`)
@@ -168,10 +169,10 @@ function BibleContent() {
         
         <div className="right">
           <div className="input-field col">
-            <button class="btn waves-effect grey" onClick={handlePrevChapter} disabled={prevBtnDisabled}><i class="material-icons">skip_previous</i></button>
+            <button className="btn waves-effect grey" onClick={handlePrevChapter} disabled={prevBtnDisabled}><i className="material-icons">skip_previous</i></button>
           </div>
           <div className="input-field col">
-            <button class="btn waves-effect grey" onClick={handleNextChapter} disabled={nextBtnDisabled}><i class="material-icons">skip_next</i></button>
+            <button className="btn waves-effect grey" onClick={handleNextChapter} disabled={nextBtnDisabled}><i className="material-icons">skip_next</i></button>
           </div>
         </div>
       </div>
@@ -190,10 +191,10 @@ function BibleContent() {
       <div className="row control-wrapper">
         <div className="right">
           <div className="input-field col">
-            <button class="btn waves-effect grey" onClick={handlePrevChapter} disabled={prevBtnDisabled}><i class="material-icons">skip_previous</i></button>
+            <button className="btn waves-effect grey" onClick={handlePrevChapter} disabled={prevBtnDisabled}><i className="material-icons">skip_previous</i></button>
           </div>
           <div className="input-field col">
-            <button class="btn waves-effect grey" onClick={handleNextChapter} disabled={nextBtnDisabled}><i class="material-icons">skip_next</i></button>
+            <button className="btn waves-effect grey" onClick={handleNextChapter} disabled={nextBtnDisabled}><i className="material-icons">skip_next</i></button>
           </div>
         </div>
       </div>
