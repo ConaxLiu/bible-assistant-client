@@ -1,38 +1,31 @@
 import React from "react";
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import "./App.css";
-import BibleContent from "./components/BibleContent";
+import HeaderContent from './components/headers/HeaderContent'
+import BibleContent from './components/mains/BibleContent';
+import FooterContent from './components/footers/FooterContent'
 
 function App() {
   return (
-    <div className="App">
-      <header>
-        <div className="logo"><span>Conax Bible Assistant</span></div>
-        <nav>
-          <ul className="navigation">
-            <li>One</li>
-            <li>Two</li>
-            <li>Three</li>
-            <li>Four</li>
-          </ul>
-        </nav>
-      </header>
-      <section>
-        <div className="contentCol leftPane">
-          <BibleContent />
-        </div>
-        <div className="contentCol rightPane">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nisi fuga
-          ullam, praesentium asperiores laboriosam est doloribus labore dicta
-          illo quia deleniti distinctio saepe accusantium illum recusandae, unde
-          debitis molestias. Consequatur?
-        </div>
-      </section>
-      <footer>
-        <div className="footerItem">
-          Copyright &copy; 2020 Conax Software Development Ltd
-        </div>
-      </footer>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <header>
+          <HeaderContent />
+        </header>
+        
+        <main>
+          <Switch>
+            <Route path='/' exact component={BibleContent} />
+            <Route path='/bible/' component={BibleContent} />
+          </Switch>
+        </main>
+
+        <footer className="page-footer transparent">
+          <FooterContent />
+        </footer>
+        
+      </div>
+    </BrowserRouter>
   );
 }
 
