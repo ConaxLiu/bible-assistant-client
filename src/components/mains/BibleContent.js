@@ -143,26 +143,18 @@ function BibleContent() {
 
   return (
     <section className="container" id="bible-content-wrapper">
+      {/* Book and Chapter selectors, top Prev and Next Chapter buttons */}
       <div className="row control-wrapper">
-
         <div className="input-field col">
           <select className="browser-default" name="book" id="book" value={bookName} onChange={handleBookChange} >
-            {
-              bookNames.map(book => (
-                <option key={book.bookName} value={book.bookName}>{book.bookName}</option>
-              ))            
-            } 
+            {bookNames.map(book => (<option key={book.bookName} value={book.bookName}>{book.bookName}</option>))} 
           </select>
         </div>
 
         <div className="input-field col selectLabel">第</div>
         <div className="input-field col">
           <select className="browser-default" name="chapter" id="chapter" value={chapterNo} onChange={handleChapterChange} >
-            {
-              chapterNos.map(chapterNo => (
-                <option key={chapterNo} value={chapterNo}>{chapterNo}</option>
-              ))
-            }
+            {chapterNos.map(chapterNo => (<option key={chapterNo} value={chapterNo}>{chapterNo}</option>))}
           </select>
         </div>
         <div className="input-field col selectLabel">章</div>
@@ -177,6 +169,7 @@ function BibleContent() {
         </div>
       </div>
 
+      {/* Chapter content */}
       <div className="row" id="bible-content">
         {Object.entries(chapterContent).map(([verseNo, verseText]) => (
           <span key={verseNo}>
@@ -188,6 +181,7 @@ function BibleContent() {
         ))}
       </div>
 
+      {/* Bottom Prev and Next Chapter buttons */}
       <div className="row control-wrapper">
         <div className="right">
           <div className="input-field col">

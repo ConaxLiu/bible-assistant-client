@@ -12,11 +12,11 @@ function Navbar() {
           </Link>
 
           <ul className="right hide-on-med-and-down">
-            <li><NavLink to='http://www.google.com'>Bible</NavLink></li>
+            <li><NavLink to='/index.html'>Bible</NavLink></li>
           </ul>
 
           <ul className="sidenav grey lighten-2" id="mobile-menu">
-            <li><a href='/'>Bible</a></li>
+            <li><a href='/index.html'>Bible</a></li>
          </ul>
         </div>
       </nav>

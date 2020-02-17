@@ -17,6 +17,7 @@ function App() {
           <Switch>
             <Route path='/' exact component={BibleContent} />
             <Route path='/bible/' component={BibleContent} />
+            <Route path='/index.html' component={BibleContent} />
           </Switch>
         </main>
 
