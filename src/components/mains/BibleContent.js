@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+//import queryString from 'query-string'
 import "./BibleContent.css";
 
 function BibleContent() {
@@ -20,9 +21,7 @@ function BibleContent() {
   // Finally it will retrieve the chapter content of the 
   // first chapter in the first book so that can be populated too.
   useEffect(() => {
-    console.log("Initializing")
-    
-    console.log(`${SERVER_URL}/api/contents/booknames`)
+    console.log("useEffect Initializing")
 
     axios
       .get(`${SERVER_URL}/api/contents/booknames`)
@@ -31,6 +30,11 @@ function BibleContent() {
         setBookNames(data);
         setChapterNos(data[0].chapters)
 
+        // const queryStringValues = queryString.parse(props.location.search)
+        // console.log(queryStringValues)
+        // setBookName(queryStringValues.book)
+        //setChapterNo(parseInt(queryStringValues.chapter))
+    
         axios
           .get(`${SERVER_URL}/api/contents/${data[0].bookName}/1`)
           .then(resp => {
@@ -49,9 +53,12 @@ function BibleContent() {
 
   // This useEffect is used when a book or chapter selection has changed
   useEffect(() => {
+    console.log("useEffect Updating")
+
     axios
     .get(`${SERVER_URL}/api/contents/${bookName}/${chapterNo}`)
     .then(resp => {
+      console.log("DATA IS", resp)
       setChapterContent(resp.data);
     })
     .catch(error => {
