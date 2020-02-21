@@ -14,8 +14,8 @@ function Search() {
   const [searchedText, setSearchedText] = useState('');
   const [searchResult, setSearchResult] = useState(null);
 
-  //const SERVER_URL = "https://conaxbibleservice.azurewebsites.net"
-  const SERVER_URL = "http://10.0.0.8:3000"
+  const SERVER_URL = "https://conaxbibleservice.azurewebsites.net"
+  //const SERVER_URL = "http://10.0.0.8:3000"
 
   // This useEffect is only for initializing default values for the controls.
   // We will fetch the list of Bible book names along with the chapter numbers.
