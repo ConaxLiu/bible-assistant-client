@@ -1,35 +1,28 @@
 import React from "react";
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import "./App.css";
-import HeaderContent from './components/headers/HeaderContent'
-import BibleContent from './components/mains/BibleContent';
-import Search from './components/mains/Search'
-import FooterContent from './components/footers/FooterContent'
+import Header from './components/header/Header'
+import BibleContent from './components/main/BibleContent';
+import Search from './components/main/Search'
+import Footer from './components/footer/Footer'
 
 function App() {
 
   return (
-    <BrowserRouter>
-      <div className="App">
-        <header>
-          <HeaderContent />
-        </header>
+    <Router>
+      <div className="App container">
+        <Header />
         
         <main>
           <Switch>
             <Route path='/' exact component={BibleContent} />
-            {/* <Route path='/bible/' component={BibleContent} />
-            <Route path='/index.html' component={BibleContent} /> */}
             <Route path='/search' component={Search} />
           </Switch>
         </main>
 
-        <footer className="page-footer transparent">
-          <FooterContent />
-        </footer>
-        
+        <Footer />
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 

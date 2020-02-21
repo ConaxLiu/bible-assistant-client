@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-//import queryString from 'query-string'
+import queryString from 'query-string'
 import "./BibleContent.css";
+import BookSelect from './BookSelect'
+import ChapterSelect from './ChapterSelect'
+import ChapterContent from './ChapterContent'
+import ContentNavigator from './ContentNavigator'
 
-function BibleContent() {
+function BibleContent(props) {
   const [bookNames, setBookNames] = useState([]);
   const [bookName, setBookName] = useState("創世紀");
   const [chapterNos, setChapterNos] = useState([]);
   const [chapterNo, setChapterNo] = useState(1);
+  const [highlightVerse, setHighlightVerse] = useState(0);
   const [chapterContent, setChapterContent] = useState({});
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(false);
@@ -22,6 +27,16 @@ function BibleContent() {
   // first chapter in the first book so that can be populated too.
   useEffect(() => {
     console.log("useEffect Initializing")
+    console.log("Props", props)
+    const queryStringValues = queryString.parse(props.location.search)
+    const {b: qBookName, c: qChapterNo, v: qVerseNo} = queryStringValues
+    console.log("qBookName", qBookName)
+    
+    // Default book name and chapter number if not specified in query string
+    let newBookName = "創世紀"
+    let newChapterNos = []
+    let newChapterNo = 1
+    let newVerseNo = 0
 
     axios
       .get(`${SERVER_URL}/api/contents/booknames`)
@@ -29,18 +44,42 @@ function BibleContent() {
         const data = resp.data;
         setBookNames(data);
         setChapterNos(data[0].chapters)
+        console.log("BookNames Data", data)
+        
+        // Check if a valid book name is passed in via query string
+        if(qBookName) {
+          const foundBook = data.find(book => book.bookName === qBookName)
+          if(foundBook)
+            newChapterNos = foundBook.chapters
 
-        // const queryStringValues = queryString.parse(props.location.search)
-        // console.log(queryStringValues)
-        // setBookName(queryStringValues.book)
-        //setChapterNo(parseInt(queryStringValues.chapter))
-    
+          // If we found the chapter numbers, that means the book name is valid
+          // So we can update the bookName and chapterNos states
+          if(newChapterNos) {
+            newBookName = qBookName
+            setBookName(qBookName)
+            setChapterNos(newChapterNos)
+          }
+
+          // Now check if a valid chapter number is passed in via query string
+          if(qChapterNo && !isNaN(qChapterNo) && qChapterNo <= newChapterNos.length) {
+            newChapterNo = qChapterNo
+            setChapterNo(newChapterNo)
+          }
+        }
+
+        // Now fetch the content of the selected book and chapter
         axios
-          .get(`${SERVER_URL}/api/contents/${data[0].bookName}/1`)
+          .get(`${SERVER_URL}/api/contents/${newBookName}/${newChapterNo}`)
           .then(resp => {
             setChapterContent(resp.data);
             setPrevBtnDisabled(true)
             setNextBtnDisabled(false)
+            console.log("Number of verses", Object.keys(resp.data).length)
+            // Now check if a valid verse number is passed in via query string
+            if(qVerseNo && !isNaN(qVerseNo) && qVerseNo <= Object.keys(resp.data).length) {
+              newVerseNo = qVerseNo
+              setHighlightVerse(newVerseNo)
+            }
           })
           .catch(error => {
             console.log(error);
@@ -49,7 +88,7 @@ function BibleContent() {
       .catch(error => {
         console.log(error);
       });
-  }, [])
+  }, [props])
 
   // This useEffect is used when a book or chapter selection has changed
   useEffect(() => {
@@ -76,6 +115,7 @@ function BibleContent() {
     const newChapterNos = bookNames.find(book => book.bookName === newBookName).chapters
     setBookName(newBookName)
     setChapterNos(newChapterNos)
+    setHighlightVerse(0)
 
     let newChapterNo = parseInt(document.getElementById('chapter').value)
 
@@ -91,6 +131,7 @@ function BibleContent() {
     console.log("handleChapterChange")
     const newChapterNo = parseInt(e.target.value)
     setChapterNo(newChapterNo)
+    setHighlightVerse(0)
     toggleChapterButtons(bookName, newChapterNo, chapterNos.length)
   }
 
@@ -111,6 +152,7 @@ function BibleContent() {
     }
     
     setChapterNo(newChapterNo)
+    setHighlightVerse(0)
     toggleChapterButtons(newBookName, newChapterNo, newChapterNos.length)
     window.scrollTo(0,0)
   }
@@ -134,6 +176,7 @@ function BibleContent() {
     }
     
     setChapterNo(newChapterNo)
+    setHighlightVerse(0)
     toggleChapterButtons(newBookName, newChapterNo, newChapterNos.length)
     window.scrollTo(0,0)
   }
@@ -152,51 +195,40 @@ function BibleContent() {
     <section className="container" id="bible-content-wrapper">
       {/* Book and Chapter selectors, top Prev and Next Chapter buttons */}
       <div className="row control-wrapper">
-        <div className="input-field col">
-          <select className="browser-default" name="book" id="book" value={bookName} onChange={handleBookChange} >
-            {bookNames.map(book => (<option key={book.bookName} value={book.bookName}>{book.bookName}</option>))} 
-          </select>
-        </div>
+        <BookSelect
+          bookNames={bookNames}
+          bookName={bookName}
+          handleBookChange={handleBookChange}
+        />
 
-        <div className="input-field col selectLabel">第</div>
-        <div className="input-field col">
-          <select className="browser-default" name="chapter" id="chapter" value={chapterNo} onChange={handleChapterChange} >
-            {chapterNos.map(chapterNo => (<option key={chapterNo} value={chapterNo}>{chapterNo}</option>))}
-          </select>
-        </div>
-        <div className="input-field col selectLabel">章</div>
-        
+        <ChapterSelect
+          chapterNos={chapterNos}
+          chapterNo={chapterNo}
+          handleChapterChange={handleChapterChange}
+        />
+
         <div className="right">
-          <div className="input-field col">
-            <button className="btn waves-effect grey" onClick={handlePrevChapter} disabled={prevBtnDisabled}><i className="material-icons">skip_previous</i></button>
-          </div>
-          <div className="input-field col">
-            <button className="btn waves-effect grey" onClick={handleNextChapter} disabled={nextBtnDisabled}><i className="material-icons">skip_next</i></button>
-          </div>
+          <ContentNavigator
+            handlePrevChapter={handlePrevChapter}
+            prevBtnDisabled={prevBtnDisabled}
+            handleNextChapter={handleNextChapter}
+            nextBtnDisabled={nextBtnDisabled}
+          />
         </div>
       </div>
 
       {/* Chapter content */}
-      <div className="row" id="bible-content">
-        {Object.entries(chapterContent).map(([verseNo, verseText]) => (
-          <span key={verseNo}>
-            <span className="verseNo">
-              {verseNo}
-              <span className="verseText">{verseText}</span>
-            </span>
-          </span>
-        ))}
-      </div>
+      <ChapterContent chapterContent={chapterContent} highlightVerse={highlightVerse} />
 
       {/* Bottom Prev and Next Chapter buttons */}
       <div className="row control-wrapper">
         <div className="right">
-          <div className="input-field col">
-            <button className="btn waves-effect grey" onClick={handlePrevChapter} disabled={prevBtnDisabled}><i className="material-icons">skip_previous</i></button>
-          </div>
-          <div className="input-field col">
-            <button className="btn waves-effect grey" onClick={handleNextChapter} disabled={nextBtnDisabled}><i className="material-icons">skip_next</i></button>
-          </div>
+          <ContentNavigator
+            handlePrevChapter={handlePrevChapter}
+            prevBtnDisabled={prevBtnDisabled}
+            handleNextChapter={handleNextChapter}
+            nextBtnDisabled={nextBtnDisabled}
+          />
         </div>
       </div>
     </section>

@@ -1,10 +1,17 @@
-#bible-content .verseNo {
+#chapter-content {
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    box-shadow: 0 6px 6px rgba(0,0,0,0.2);
+    padding: 5px;
+}
+
+#chapter-content .verseNo {
     color: red;
     /*font-size: 1rem;*/
     margin-right: 5px;
 }
 
-#bible-content .verseText {
+#chapter-content .verseText {
     color: black;
     font-family: 'cwTeXKai', 'Noto Sans TC';
     font-size: 1.5rem;
