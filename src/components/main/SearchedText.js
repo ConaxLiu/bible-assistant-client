@@ -1,6 +1,8 @@
 import React from 'react'
 
 function SearchedText({searchedString, searchedText}) {
+  // console.log("Rendering SearchedText...")
+
   const splitted = searchedString.split(new RegExp(`(${searchedText})`, 'gi'));
   
   return (
@@ -14,4 +16,4 @@ function SearchedText({searchedString, searchedText}) {
   )
 }
 
-export default SearchedText
+export default React.memo(SearchedText)

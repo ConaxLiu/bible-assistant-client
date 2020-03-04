@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import SearchedText from './SearchedText'
 
 function SearchResult({searchResult, searchedText}) {
+  // console.log("Rendering SearchResult...")
+
   if(searchResult === null) return null
 
   if(searchResult.count === 0) {
@@ -13,12 +15,6 @@ function SearchResult({searchResult, searchedText}) {
     )
   }
   else {
-    // const searchedTextPattern = new RegExp(searchedText, 'g')
-    // console.log(searchedTextPattern, searchResult)
-    // searchResult.data.forEach(result => {
-    //   result.highlightedVerse = result.verse.replace(searchedTextPattern, (<span class="yellow">{searchedText}</span>))
-    // })
-
     return (
       <div className="row" id="search-result">
         <div className="resultSummary">總共有 {searchResult.count} 節經文包含了您的搜索詞彙</div>
@@ -45,4 +41,4 @@ function SearchResult({searchResult, searchedText}) {
   }
 }
 
-export default SearchResult
+export default React.memo(SearchResult)

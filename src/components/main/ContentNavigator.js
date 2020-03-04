@@ -1,6 +1,8 @@
 import React from 'react'
 
 function ContentNavigator({handlePrevChapter, prevBtnDisabled, handleNextChapter, nextBtnDisabled}) {
+  // console.log("Rendering ContentNavigator...")
+
   return (
     <div className="row contentNavigator">
       <div className="input-field col">
@@ -13,4 +15,4 @@ function ContentNavigator({handlePrevChapter, prevBtnDisabled, handleNextChapter
   )
 }
 
-export default ContentNavigator
+export default React.memo(ContentNavigator)

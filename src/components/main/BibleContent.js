@@ -8,6 +8,7 @@ import ChapterContent from './ChapterContent'
 import ContentNavigator from './ContentNavigator'
 
 function BibleContent(props) {
+  // console.log("Rendering BibleContent...")
   const [bookNames, setBookNames] = useState([]);
   const [bookName, setBookName] = useState("創世紀");
   const [chapterNos, setChapterNos] = useState([]);
@@ -17,20 +18,17 @@ function BibleContent(props) {
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(false);
 
-  const SERVER_URL = "https://conaxbibleservice.azurewebsites.net"
-  //const SERVER_URL = "http://10.0.0.8:3000"
-
   // This useEffect is only for initializing default values for the controls
   // We will get the list of Bible book names along with the chapter numbers.
   // This should then allow the book and chapter selection dropdowns to be populated.
   // Finally it will retrieve the chapter content of the 
   // first chapter in the first book so that can be populated too.
   useEffect(() => {
-    console.log("useEffect Initializing")
-    console.log("Props", props)
+    // console.log("useEffect Initializing")
+    // console.log("Props", props)
     const queryStringValues = queryString.parse(props.location.search)
     const {b: qBookName, c: qChapterNo, v: qVerseNo} = queryStringValues
-    console.log("qBookName", qBookName)
+    // console.log("qBookName", qBookName)
     
     // Default book name and chapter number if not specified in query string
     let newBookName = "創世紀"
@@ -39,16 +37,16 @@ function BibleContent(props) {
     let newVerseNo = 0
 
     axios
-      .get(`${SERVER_URL}/api/contents/booknames`)
+      .get(`${props.serverUrl}/api/contents/booknames`)
       .then(resp => {
-        const data = resp.data;
-        setBookNames(data);
-        setChapterNos(data[0].chapters)
-        console.log("BookNames Data", data)
+        const bookNamesData = resp.data;
+        setBookNames(bookNamesData);
+        setChapterNos(bookNamesData[0].chapters)
+        // console.log("BookNames Data", data)
         
         // Check if a valid book name is passed in via query string
         if(qBookName) {
-          const foundBook = data.find(book => book.bookName === qBookName)
+          const foundBook = bookNamesData.find(book => book.bookName === qBookName)
           if(foundBook)
             newChapterNos = foundBook.chapters
 
@@ -56,25 +54,27 @@ function BibleContent(props) {
           // So we can update the bookName and chapterNos states
           if(newChapterNos) {
             newBookName = qBookName
-            setBookName(qBookName)
+            setBookName(newBookName)
             setChapterNos(newChapterNos)
           }
 
           // Now check if a valid chapter number is passed in via query string
           if(qChapterNo && !isNaN(qChapterNo) && qChapterNo <= newChapterNos.length) {
-            newChapterNo = qChapterNo
+            newChapterNo = parseInt(qChapterNo)
             setChapterNo(newChapterNo)
           }
         }
 
         // Now fetch the content of the selected book and chapter
         axios
-          .get(`${SERVER_URL}/api/contents/${newBookName}/${newChapterNo}`)
+          .get(`${props.serverUrl}/api/contents/${newBookName}/${newChapterNo}`)
           .then(resp => {
             setChapterContent(resp.data);
-            setPrevBtnDisabled(true)
-            setNextBtnDisabled(false)
-            console.log("Number of verses", Object.keys(resp.data).length)
+
+            setPrevBtnDisabled(newBookName === bookNamesData[0].bookName && newChapterNo === 1)
+            setNextBtnDisabled(newBookName === bookNamesData[bookNamesData.length-1].bookName && newChapterNo === newChapterNos.length)
+
+            // console.log("Number of verses", Object.keys(resp.data).length)
             // Now check if a valid verse number is passed in via query string
             if(qVerseNo && !isNaN(qVerseNo) && qVerseNo <= Object.keys(resp.data).length) {
               newVerseNo = qVerseNo
@@ -92,25 +92,25 @@ function BibleContent(props) {
 
   // This useEffect is used when a book or chapter selection has changed
   useEffect(() => {
-    console.log("useEffect Updating")
+    // console.log("useEffect Updating")
 
     axios
-    .get(`${SERVER_URL}/api/contents/${bookName}/${chapterNo}`)
+    .get(`${props.serverUrl}/api/contents/${bookName}/${chapterNo}`)
     .then(resp => {
-      console.log("DATA IS", resp)
+      // console.log("DATA IS", resp)
       setChapterContent(resp.data);
     })
     .catch(error => {
       console.log(error);
     });
-  }, [bookName, chapterNo])
+  }, [bookName, chapterNo, props])
 
   // When a book selection has changed, we need to update the chapter numbers for the new selected book
   // Also if the previous book has more chapters than the new selected book
   // and the previous selected chapter is outside the range of the current book's chapters 
   // then we need to automatically select the last chapter of the new selected book.
   const handleBookChange = (e) => {
-    console.log("handleBookChange")
+    // console.log("handleBookChange")
     const newBookName = e.target.value;
     const newChapterNos = bookNames.find(book => book.bookName === newBookName).chapters
     setBookName(newBookName)
@@ -128,7 +128,7 @@ function BibleContent(props) {
   }
 
   const handleChapterChange = (e) => {
-    console.log("handleChapterChange")
+    // console.log("handleChapterChange")
     const newChapterNo = parseInt(e.target.value)
     setChapterNo(newChapterNo)
     setHighlightVerse(0)
@@ -136,12 +136,13 @@ function BibleContent(props) {
   }
 
   const handlePrevChapter = (e) => {
-    console.log("handlePrevChapter")
-    
+    // console.log("handlePrevChapter")
     let newBookName = bookName
     let newChapterNos = chapterNos
     let newChapterNo = chapterNo - 1
-    
+
+    console.log("newBookName", newBookName, "newChapterNos", newChapterNos, "newChapterNo", newChapterNo)
+
     if(newChapterNo < 1) {
       const bookIndex = bookNames.findIndex(book => book.bookName === newBookName)
       newBookName = bookNames[bookIndex-1].bookName
@@ -160,12 +161,13 @@ function BibleContent(props) {
   // When Next Chapter is clicked, try to go to the next chapter in the current book.
   // If we're already at the last chapter, we will go to the first chapter of next book.
   const handleNextChapter = (e) => {
-    console.log("handleNextChapter")
-
+    // console.log("handleNextChapter")
     let newBookName = bookName
     let newChapterNos = chapterNos
     let newChapterNo = chapterNo + 1
     
+    console.log("newBookName", newBookName, "newChapterNos", newChapterNos, "newChapterNo", newChapterNo)
+
     if(newChapterNo > chapterNos.length) {
       const bookIndex = bookNames.findIndex(book => book.bookName === newBookName)
       newBookName = bookNames[bookIndex+1].bookName
@@ -235,4 +237,4 @@ function BibleContent(props) {
   );
 }
 
-export default BibleContent;
+export default React.memo(BibleContent);

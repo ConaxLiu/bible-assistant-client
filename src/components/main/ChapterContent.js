@@ -1,6 +1,8 @@
 import React from 'react'
 
 function ChapterContent({chapterContent, highlightVerse}) {
+  // console.log("Rendering ChapterContent...")
+
   return (
     <div className="row" id="chapter-content">
       {Object.entries(chapterContent).map(([verseNo, verseText]) => (
@@ -25,4 +27,4 @@ function ChapterContent({chapterContent, highlightVerse}) {
   )
 }
 
-export default ChapterContent
+export default React.memo(ChapterContent)

@@ -1,11 +1,13 @@
 import React from 'react'
 
-function SearchPhraseEntry({handleSearchTextChange, handleSearchClick, searchedText}) {
+function SearchPhraseEntry({handleSearchClick}) {
+  // console.log("Rendering SearchPhraseEntry...")
+
   return (
     <>
       <div className="input-field col">
         <div className="search-wrapper focused">
-          <input type="text" id="phraseToSearch" value={searchedText} placeholder="搜索詞彙" onChange={handleSearchTextChange} />
+          <input type="text" id="phraseToSearch" placeholder="搜索詞彙" />
         </div>
       </div>
       <div className="input-field col">
@@ -15,4 +17,4 @@ function SearchPhraseEntry({handleSearchTextChange, handleSearchClick, searchedT
   )
 }
 
-export default SearchPhraseEntry
+export default React.memo(SearchPhraseEntry)

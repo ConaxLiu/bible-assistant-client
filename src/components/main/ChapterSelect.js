@@ -1,6 +1,8 @@
 import React from 'react'
 
 function ChapterSelect({chapterNos, chapterNo, handleChapterChange, includeAll}) {
+  // console.log("Rendering ChapterSelect...")
+
   if(chapterNos.length === 0) return null
   
   let options = []
@@ -28,4 +30,4 @@ function ChapterSelect({chapterNos, chapterNo, handleChapterChange, includeAll})
   )
 }
 
-export default ChapterSelect
+export default React.memo(ChapterSelect)

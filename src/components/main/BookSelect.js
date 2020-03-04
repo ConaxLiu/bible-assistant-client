@@ -1,6 +1,7 @@
 import React from 'react'
 
 function BookSelect({bookNames, bookName, handleBookChange, includeAll}) {
+  // console.log("Rendering BookSelect...")
   let options = []
 
   if(includeAll) {
@@ -20,4 +21,4 @@ function BookSelect({bookNames, bookName, handleBookChange, includeAll}) {
   )
 }
 
-export default BookSelect
+export default React.memo(BookSelect)
