@@ -5,7 +5,7 @@ function Footer() {
   return (
     <footer className="page-footer grey darken-2">
       <div className="container">
-        <div className="center-align">© 2020 Conax Software Development</div>
+        <div className="center-align">Created by Conway Liu</div>
       </div>
     </footer>
   )
