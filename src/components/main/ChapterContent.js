@@ -2,6 +2,7 @@ import React from 'react'
 
 function ChapterContent({chapterContent, highlightVerse}) {
   console.log("Rendering ChapterContent...", chapterContent, highlightVerse)
+  console.debug()
 
   return (
     <div className="row" id="chapter-content">

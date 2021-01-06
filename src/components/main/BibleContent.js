@@ -8,9 +8,10 @@ import ChapterContent from './ChapterContent'
 import ContentNavigator from './ContentNavigator'
 
 function BibleContent(props) {
+  const defaultBookName = "創世紀" // Genesis
   // console.log("Rendering BibleContent...")
   const [bookNames, setBookNames] = useState([]);
-  const [bookName, setBookName] = useState("Genesis");
+  const [bookName, setBookName] = useState(defaultBookName);
   const [chapterNos, setChapterNos] = useState([]);
   const [chapterNo, setChapterNo] = useState(1);
   const [highlightVerse, setHighlightVerse] = useState(0);
@@ -31,7 +32,7 @@ function BibleContent(props) {
     // console.log("qBookName", qBookName)
     
     // Default book name and chapter number if not specified in query string
-    let newBookName = "Genesis" //"創世紀"
+    let newBookName = defaultBookName //"Genesis" //"創世紀"
     let newChapterNos = []
     let newChapterNo = 1
     let newVerseNo = 0
