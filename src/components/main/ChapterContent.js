@@ -1,7 +1,7 @@
 import React from 'react'
 
 function ChapterContent({chapterContent, highlightVerse}) {
-  // console.log("Rendering ChapterContent...")
+  console.log("Rendering ChapterContent...", chapterContent, highlightVerse)
 
   return (
     <div className="row" id="chapter-content">

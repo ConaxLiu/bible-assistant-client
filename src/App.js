@@ -7,8 +7,8 @@ import Search from './components/main/Search'
 import Footer from './components/footer/Footer'
 
 function App() {
-  const SERVER_URL = "https://conaxbibleservice.azurewebsites.net"
-  //const SERVER_URL = "http://10.0.0.8:3000"
+  //const SERVER_URL = "https://conaxbibleservice.azurewebsites.net"
+  const SERVER_URL = "http://10.0.0.8:3000"
 
 return (
     <Router>
