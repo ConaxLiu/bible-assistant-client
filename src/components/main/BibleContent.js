@@ -8,7 +8,7 @@ import ChapterContent from './ChapterContent'
 import ContentNavigator from './ContentNavigator'
 
 function BibleContent(props) {
-  const defaultBookName = "創世紀" // Genesis
+  const defaultBookName = "創世記" // Genesis
   // console.log("Rendering BibleContent...")
   const [bookNames, setBookNames] = useState([]);
   const [bookName, setBookName] = useState(defaultBookName);
